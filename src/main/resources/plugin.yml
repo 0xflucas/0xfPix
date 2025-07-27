@@ -1,0 +1,10 @@
+name: 0xfPix
+main: br.com._0xf.Main
+version: 1.0-SNAPSHOT
+soft-depend: []
+author: 0xflucas
+commands:
+  shop:
+    description: Plugin para compras de item com Pix.
+    usage: /shop <args>
+    aliases: [loja, pix]

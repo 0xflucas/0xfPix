@@ -1,0 +1,238 @@
+mysql:
+  host: "localhost"
+  port: 3306
+  database: "0xfpix_payments"
+  username: "root"
+  password: ""
+
+mercado-pago:
+  token: 'APP_USR-8675568385015371-072422-c44c05ecf5aa4d5c8217b6384c224a3b-822632870'
+
+categories:
+  vips:
+    slot: 10
+    id: 388 # emerald
+    data: 0
+    name: '&6Vips &7- acesso especial'
+    lore:
+      - ''
+      - '&7Adquira vantagens exclusivas'
+      - '&7Como voar, cores e mais!'
+      - ''
+      - '&eClique para abrir.'
+    products:
+      vip-bronze:
+        slot: 20
+        id: 351
+        data: 10
+        name: '&6Vip &ebronze'
+        lore:
+          - '&8Duração: &f30 dias'
+          - ''
+          - '&a✔ &7Voar no lobby'
+          - '&a✔ &7Prefixo personalizado'
+          - ''
+          - '&7Preço: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 0.01
+        commands:
+          - 'bc o {player} comprou o VIP Bronze!'
+
+      vip-prata:
+        slot: 21
+        id: 351
+        data: 8
+        name: '&7Vip &fPrata'
+        lore:
+          - '&8Duração: &f30 dias'
+          - ''
+          - '&a✔ &7Voar em todo servidor'
+          - '&a✔ &7Clans e eventos VIP'
+          - ''
+          - '&7Preço: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 10.00
+        commands:
+          - 'givevip prata {player}'
+
+      vip-ouro:
+        slot: 22
+        id: 266
+        data: 0
+        name: '&eVip &6Ouro'
+        lore:
+          - '&8Duração: &f30 dias'
+          - ''
+          - '&a✔ &7Todos os comandos liberados'
+          - '&a✔ &7Tag exclusiva no chat'
+          - ''
+          - '&7Preço: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 20.00
+        commands:
+          - 'givevip ouro {player}'
+
+  spawners:
+    slot: 12
+    id: 383 # spawn egg
+    data: 0
+    name: '&dSpawners'
+    lore:
+      - ''
+      - '&7Compre spawners para gerar mobs'
+      - '&7e melhorar suas aventuras!'
+      - ''
+      - '&eClique para abrir.'
+    products:
+      spawner-zombie:
+        slot: 23
+        id: 383
+        data: 54
+        name: '&dSpawner de Zumbi'
+        lore:
+          - '&8Spawner que gera zumbis'
+          - ''
+          - '&a✔ &7Otimo para farms'
+          - '&a✔ &7Defenda sua base'
+          - ''
+          - '&7Preço: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 15.00
+        commands:
+          - 'give {player} spawn_egg 1 54'
+
+      spawner-skeleton:
+        slot: 24
+        id: 383
+        data: 51
+        name: '&dSpawner de Esqueleto'
+        lore:
+          - '&8Spawner que gera esqueletos'
+          - ''
+          - '&a✔ &7Ideal para farmar flechas'
+          - '&a✔ &7Proteja sua fortaleza'
+          - ''
+          - '&7Preço: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 18.00
+        commands:
+          - 'give {player} spawn_egg 1 51'
+
+      spawner-creeper:
+        slot: 25
+        id: 383
+        data: 50
+        name: '&dSpawner de Creeper'
+        lore:
+          - '&8Spawner que gera creepers'
+          - ''
+          - '&a✔ &7Use com cuidado'
+          - '&a✔ &7Explosões garantidas'
+          - ''
+          - '&7Preço: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 20.00
+        commands:
+          - 'give {player} spawn_egg 1 50'
+
+  ferramentas:
+    slot: 13
+    id: 290 # wooden shovel (sem dano de ataque)
+    data: 0
+    name: '&3Ferramentas'
+    lore:
+      - ''
+      - '&7Ferramentas para facilitar a vida'
+      - '&7e aumentar sua produtividade.'
+      - ''
+      - '&eClique para abrir.'
+    products:
+      pá-madeira:
+        slot: 25
+        id: 290
+        data: 0
+        name: '&bPá de Madeira'
+        lore:
+          - '&8Ferramenta leve e útil'
+          - ''
+          - '&a✔ &7Escava mais rápido'
+          - '&a✔ &7Durabilidade razoável'
+          - ''
+          - '&7Preço: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 5.00
+        commands:
+          - 'give {player} wooden_shovel 1'
+
+      tocha:
+        slot: 26
+        id: 50 # torch
+        data: 0
+        name: '&bTocha'
+        lore:
+          - '&8Ilumina seu caminho'
+          - ''
+          - '&a✔ &7Fácil de usar'
+          - '&a✔ &7Perfeita para exploração'
+          - ''
+          - '&7Preço: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 1.00
+        commands:
+          - 'give {player} torch 16'
+
+  decoracoes:
+    slot: 14
+    id: 141 # quartz_block
+    data: 0
+    name: '&fDecorações &7- deixe seu mundo bonito'
+    lore:
+      - ''
+      - '&7Blocos e itens para decorar'
+      - '&7suas construções e ambientes.'
+      - ''
+      - '&eClique para abrir.'
+    products:
+      vaso-flores:
+        slot: 27
+        id: 390
+        data: 0
+        name: '&fVaso de Flores'
+        lore:
+          - '&8Decore sua casa com estilo'
+          - ''
+          - '&a✔ &7Colorido e vibrante'
+          - '&a✔ &7Perfeito para jardins'
+          - ''
+          - '&7Preço: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 4.00
+        commands:
+          - 'give {player} flower_pot 1'
+
+      quadro-paisagem:
+        slot: 28
+        id: 321
+        data: 0
+        name: '&fQuadro Paisagem'
+        lore:
+          - '&8Decore paredes com arte'
+          - ''
+          - '&a✔ &7Beleza e estilo'
+          - '&a✔ &7Valoriza sua casa'
+          - ''
+          - '&7Preço: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 5.50
+        commands:
+          - 'give {player} painting 1'

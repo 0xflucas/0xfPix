@@ -1,0 +1,64 @@
+package br.com._0xf.commands;
+
+import br.com._0xf.Main;
+import br.com._0xf.gui.ShopGui;
+import br.com._0xf.pix.PixManager;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+public class ShopCommand implements CommandExecutor {
+
+    private final ShopGui gui;
+    private final PixManager pixManager;
+    private final Main main;
+
+    public ShopCommand(ShopGui gui, Main main ) {
+        this.gui = gui;
+        this.pixManager = main.getPix();
+        this.main = main;
+    }
+
+    @Override
+    public boolean onCommand(
+        CommandSender sender,
+        Command command,
+        String label,
+        String[] args
+    ) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("Comando apenas para jogadores.");
+            return true;
+        }
+
+        Player p = (Player) sender;
+        if (args.length == 0) {
+            gui.openMainMenu(p);
+            return true;
+        }
+
+        String sub = args[0].toLowerCase();
+        if(sub.equals("reload") || sub.equals("rl")) {
+            main.getInstance().reloadConfig();
+            p.sendMessage("§aConfiguração recarregada com sucesso.");
+            return true;
+        }
+
+        if(sub.equals("status")) {
+            String paymentIdStatus = pixManager.getLastPayment(p.getName());
+            if (paymentIdStatus == null) {
+                p.sendMessage("§cNenhum pagamento encontrado.");
+                return true;
+            }
+
+            pixManager.consultarStatusPagamento(paymentIdStatus, p, true);
+            return true;
+        }
+
+        p.sendMessage(ChatColor.RED + "Usage: /" + label + " [status|reload]");
+        return true;
+    }
+}

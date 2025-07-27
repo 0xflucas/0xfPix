@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group = 'br.com._0xf'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = uri('https://repo.hpfxd.com/releases/')
+    }
+}
+
+dependencies {
+    implementation 'com.squareup.okhttp3:okhttp:3.12.12'
+
+    implementation 'com.google.zxing:core:3.5.3'
+    compileOnly "com.hpfxd.pandaspigot:pandaspigot-api:1.8.8-R0.1-SNAPSHOT"
+    compileOnly files('lib/PlotSquared-Bukkit-18.12.12-be48507-2053.jar')
+}
+
+// Desabilita o jar padrão, vamos usar só o shadowJar
+tasks.jar {
+    enabled = false
+}
+
+tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    archiveBaseName.set(project.name)
+    archiveVersion.set(project.version)
+    archiveClassifier.set('')
+
+    // Inclui tudo que for necessário dentro do fat jar (inclusive kotlin-stdlib)
+    mergeServiceFiles()
+    minimize()
+}
+
+// Registra a task copyPlugin para copiar o jar gerado para a pasta de plugins
+tasks.register('copyPlugin', Copy) {
+    dependsOn(tasks.named('shadowJar'))
+
+    // from aceita Provider<File> diretamente
+    from(tasks.named('shadowJar').flatMap { it.archiveFile })
+
+    into 'C:/Users/lucas/Desktop/0xfPix/plugins'
+    rename { "${project.name}-${project.version}.jar" }
+    exclude '**/*.lck'
+    doNotTrackState("Plugin folder may contain locked files (e.g., .lck from server)")
+}
+
+// Faz o build depender da shadowJar e da copyPlugin
+tasks.build {
+    dependsOn(tasks.named('shadowJar'))
+    dependsOn(tasks.named('copyPlugin'))
+}
+
+
