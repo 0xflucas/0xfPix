@@ -20,7 +20,7 @@ public class ConfirmationGui {
     static CustomHead customHeadAPI = new CustomHead();
     private static final int SIZE = 27;
     private final ItemStack cancelItem = customHeadAPI.create("&cCancelar Compra", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWMxNDYwMGFjZTUwNjk1YzdjOWJjZjA5ZTQyYWZkOWY1M2M5ZTIwZGFhMTUyNGM5NWRiNDE5N2RkMzExNjQxMiJ9fX0=");
-    private final ItemStack confirmItem = customHeadAPI.create("&aConfirmar Compra", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzgzYTg4YjU5M2RhYjdlNjIxOGI3OWY1ZDk1YzQ0YmI3ZWExNzQyN2M4ZTZjOGNmNmJiNTFjZDJiYTZlY2UyYSJ9fX0=");
+    private final ItemStack buyItem = customHeadAPI.create("&aConfirmar Compra", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzgzYTg4YjU5M2RhYjdlNjIxOGI3OWY1ZDk1YzQ0YmI3ZWExNzQyN2M4ZTZjOGNmNmJiNTFjZDJiYTZlY2UyYSJ9fX0=");
     private final Random random = new Random();
     private final Map<UUID, data> pendents = new HashMap<>();
     private final PixManager pixManager;
@@ -30,7 +30,7 @@ public class ConfirmationGui {
         this.pixManager = main.getPix(); // usa a mesma instância global
     }
 
-    public void open(Player player, String produto, double valor) {
+    public void open(Player p, String product, double price) {
         Inventory inv = Bukkit.createInventory(null, SIZE, ChatColor.DARK_GRAY + "Confirme a Compra");
 
         for (int i = 0; i < SIZE; i++) {
@@ -38,14 +38,14 @@ public class ConfirmationGui {
         }
 
         int greenSlot = random.nextInt(SIZE);
-        inv.setItem(greenSlot, confirmItem);
+        inv.setItem(greenSlot, buyItem);
 
-        pendents.put(player.getUniqueId(), new data(produto, valor));
-        player.openInventory(inv);
+        pendents.put(p.getUniqueId(), new data(product, price));
+        p.openInventory(inv);
     }
 
         public void handleClick(InventoryClickEvent event) {
-            Player player = (Player) event.getWhoClicked();
+            Player p = (Player) event.getWhoClicked();
             Inventory inv = event.getInventory();
 
             if (!inv.getTitle().equals(ChatColor.DARK_GRAY  + "Confirme a Compra")) return;
@@ -58,24 +58,25 @@ public class ConfirmationGui {
             String name = ChatColor.stripColor(clicked.getItemMeta().getDisplayName());
 
             if (name.equalsIgnoreCase("Confirmar Compra")) {
-                if(!isInvFull(player)) {
-                    player.sendMessage(ChatColor.RED + "Seu inventário está cheio. Você precisa de um espaço vazio para receber o item.");
-                    player.closeInventory();
+                if(!isInvFull(p)) {
+                    p.sendMessage(ChatColor.RED + "Seu inventário está cheio. Você precisa de um espaço vazio para receber o item.");
+                    p.closeInventory();
                     return;
                 }
 
-                data compra = pendents.get(player.getUniqueId());
+                data buy = pendents.get(p.getUniqueId());
 
-                if (compra != null) {
-                    player.closeInventory();
-                    pixManager.criarPagamentoPIX(player, compra.product, compra.price);
+                if (buy != null) {
+                    pixManager.createPixPayment(p, buy.product, buy.price);
+                    p.closeInventory();
                 } else {
-                    player.closeInventory();
-                    player.sendMessage(ChatColor.RED + "Nenhuma compra pendente encontrada.");
+                    p.sendMessage(ChatColor.RED + "Nenhuma compra pendente encontrada.");
+                    p.closeInventory();
                 }
+
             } else if (name.equalsIgnoreCase("Cancelar Compra")) {
-                pendents.remove(player.getUniqueId());
-                player.closeInventory();
+                pendents.remove(p.getUniqueId());
+                p.closeInventory();
                 // player.sendMessage(ChatColor.RED + "Compra cancelada.");
             }
         }

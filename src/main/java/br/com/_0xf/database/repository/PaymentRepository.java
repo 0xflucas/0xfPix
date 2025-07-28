@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class PaymentRepository {
 
-    private PaymentDAO dbManager;
+    private final PaymentDAO dbManager;
     private final Map<String, Payment> cache = new  ConcurrentHashMap<>();
 
     public PaymentRepository(PaymentDAO dbManager) {
@@ -25,12 +25,14 @@ public class PaymentRepository {
         cache.put(payment.getId(), payment); // atualiza cache
     }
 
+    /*
     public List<Payment> getAllByPlayer(UUID uuid) {
-        return dbManager.getPayments(uuid);
+        return dbManager.getPaymentsByUUID(uuid);
     }
+    */
 
     public List<Payment> getAll(UUID uuid) {
-        List<Payment> payments = dbManager.getPayments(uuid);
+        List<Payment> payments = dbManager.getPaymentsByUUID(uuid);
         if (payments == null) return Collections.emptyList();
 
         return payments.stream()

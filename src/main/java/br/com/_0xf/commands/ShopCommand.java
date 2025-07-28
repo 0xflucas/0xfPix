@@ -29,6 +29,7 @@ public class ShopCommand implements CommandExecutor {
         String label,
         String[] args
     ) {
+
         if (!(sender instanceof Player)) {
             sender.sendMessage("Comando apenas para jogadores.");
             return true;
@@ -40,17 +41,16 @@ public class ShopCommand implements CommandExecutor {
             return true;
         }
 
-        String sub = args[0].toLowerCase();
-        if(sub.equals("reload") || sub.equals("rl")) {
+        if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
             main.getInstance().reloadConfig();
             p.sendMessage("§aConfiguração recarregada com sucesso.");
             return true;
         }
 
-        if(sub.equals("status")) {
+        if(args[0].equals("status")) {
             String paymentIdStatus = pixManager.getLastPayment(p.getName());
             if (paymentIdStatus == null) {
-                p.sendMessage("§cNenhum pagamento encontrado.");
+                p.sendMessage("§cNenhum pagamento pendente encontrado.");
                 return true;
             }
 
@@ -58,7 +58,7 @@ public class ShopCommand implements CommandExecutor {
             return true;
         }
 
-        p.sendMessage(ChatColor.RED + "Usage: /" + label + " [status|reload]");
+        p.sendMessage(ChatColor.RED + "Por favor, use: /" + label + " [status|reload]");
         return true;
     }
 }

@@ -38,6 +38,7 @@ public class Main  extends JavaPlugin {
                 this.getConfig().getString("mysql.database"),
                 this.getConfig().getString("mysql.username"),
                 this.getConfig().getString("mysql.password"),
+
                 this
         );
 
@@ -58,6 +59,7 @@ public class Main  extends JavaPlugin {
         confirmationGui = new ConfirmationGui(this);
         shopGui = new ShopGui(this, confirmationGui);
         historyGui = new HistoryGui(this);
+
         setupEvents();
         setupCommands();
         setupMessages();
@@ -104,8 +106,10 @@ public class Main  extends JavaPlugin {
                 categories.put(catId, category);
             }
         }
-        getLogger().info("Categorias e produtos carregados: " + categories.size());
+
+        Bukkit.getConsoleSender().sendMessage("§aCategorias e produtos carregados: §7" + categories.size());
     }
+
     void setupMessages() {
         Bukkit.getConsoleSender().sendMessage("");
         Bukkit.getConsoleSender().sendMessage("");

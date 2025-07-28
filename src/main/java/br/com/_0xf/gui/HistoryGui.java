@@ -39,7 +39,7 @@ public class HistoryGui {
         for (Payment product : list) {
             if (slot >= 54) break; // prevenir overflow
 
-            ItemStack item = customHeadAPI.create("§7#"+ product.getId(),
+            ItemStack item = customHeadAPI.create("§7#" + product.getId(),
                     "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWNhOWNmZWVjMGM2ZjJkMGMxYjI5NWJhZjJkZmZlMDAwZDRiOWYzNzI1ODI3ZjFkZDY3ZWI0NmFjMmFhZDY1NiJ9fX0=",
                     Arrays.asList(
                             "",
@@ -56,33 +56,31 @@ public class HistoryGui {
             inv.setItem(slot++, item);
         }
 
-        Map<String, String> pendentes = main.getPix().pagamentos;
-        for (Map.Entry<String, String> entry : pendentes.entrySet()) {
+        Map<String, String> pendents = main.getPix().payments;
+        for (Map.Entry<String, String> entry : pendents.entrySet()) {
             if (!entry.getKey().equalsIgnoreCase(player.getName())) continue;
 
-            String produto = main.getPix().produtosPorPagamento.get(entry.getValue());
-            Double valor = main.getPix().valoresPorPagamento.get(entry.getValue());
-            Long criadoEm = main.getPix().timestampsPorPagamento.get(entry.getValue()); // veja abaixo como populá-lo
+            String product = main.getPix().productByPayment.get(entry.getValue());
+            Double price = main.getPix().priceByPayment.get(entry.getValue());
+            Long createdAt = main.getPix().timestampByPayment.get(entry.getValue()); // veja abaixo como populá-lo
 
-            if (produto == null || valor == null) continue;
-            ItemStack item = customHeadAPI.create("§7#"+ entry.getValue(),
+            if (product == null || price == null) continue;
+            ItemStack item = customHeadAPI.create("§7#" + entry.getValue(),
                     "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODk4N2MwMDNlNTEyMDRhNmE4ZDZkYTcxMzUzZTBjOWM1MTY2YWVjMDNlZWQ5MzU3ZjcyZjM0ZmFhYThlOTNlYiJ9fX0=",
                     Arrays.asList(
                             "",
-                            ChatColor.GRAY + "Produto: " + ChatColor.WHITE + produto,
-                            ChatColor.GRAY + "Valor: " + ChatColor.GREEN + "R$ " + String.format("%.2f", valor),
+                            ChatColor.GRAY + "Produto: " + ChatColor.WHITE + product,
+                            ChatColor.GRAY + "Valor: " + ChatColor.GREEN + "R$ " + String.format("%.2f", price),
                             ChatColor.GRAY + "Status: " + ChatColor.RED + "Pendente",
-                            ChatColor.GRAY + "Data: " + ChatColor.WHITE + sdf.format(new Date(criadoEm)),
+                            ChatColor.GRAY + "Data: " + ChatColor.WHITE + sdf.format(new Date(createdAt)),
                             "",
                             ChatColor.GRAY + "▶ Clique para detalhes"
                     ));
 
 
             ItemMeta meta = item.getItemMeta();
-
-
-                item.setItemMeta(meta);
-                if (slot < 54) inv.setItem(slot++, item);
+            item.setItemMeta(meta);
+            if (slot < 54) inv.setItem(slot++, item);
         }
 
         player.openInventory(inv);

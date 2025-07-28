@@ -81,7 +81,7 @@ public class PaymentDAO {
         });
     }
 
-    public List<Payment> getPayments(UUID uuid) {
+    public List<Payment> getPaymentsByUUID(UUID uuid) {
         List<Payment> list = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(
                 "SELECT * FROM payments WHERE uuid = ? ORDER BY created_at DESC")) {

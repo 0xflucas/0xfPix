@@ -40,7 +40,7 @@ public class InvClickHandler implements Listener {
     public void onInventoryClick(InventoryClickEvent e) {
         // 1) Verifica se é um player
         if (!(e.getWhoClicked() instanceof Player)) return;
-        Player player = (Player) e.getWhoClicked();
+        Player p = (Player) e.getWhoClicked();
 
         // 2) Protege contra slots vazios ou cursor
         ItemStack clicked = e.getCurrentItem();
@@ -68,20 +68,20 @@ public class InvClickHandler implements Listener {
 
                 // 5b) Se for o ícone de Histórico
                 if (name.equals(ChatColor.GREEN + "Histórico de Compras")) {
-                    historyGui.openHistoryMenu(player);
+                    historyGui.openHistoryMenu(p);
                     return;
                 }
             }
 
             // 5c) Senão, trata clique em categoria
-            shopGui.handleCategoryClick(player, clicked);
+            shopGui.handleCategoryClick(p, clicked);
             return;
         }
 
         // 6) Handler do menu de produtos
         if (title.startsWith(productTitlePrefix)) {
             e.setCancelled(true);
-            shopGui.handleProductClick(player, clicked);
+            shopGui.handleProductClick(p, clicked);
             return;
         }
 
@@ -103,22 +103,21 @@ public class InvClickHandler implements Listener {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy 'às' HH:mm");
 
 
-                    player.sendMessage("");
-                    player.sendMessage(ChatColor.GREEN + "   ▸ Detalhes do Pagamento ◂   ");
-                    player.sendMessage("");
-                    player.sendMessage(ChatColor.GRAY   + "ID:      " + ChatColor.WHITE  + paid.getId());
-                    player.sendMessage(ChatColor.GRAY   + "Produto: " + ChatColor.WHITE  + paid.getItem());
-                    player.sendMessage(ChatColor.GRAY   + "Valor:   " + ChatColor.GREEN  + "R$ " + String.format("%.2f", paid.getAmount()));
-                    player.sendMessage(ChatColor.GRAY   + "Status:  " + (paid.getStatus().equalsIgnoreCase("paid")
+                    p.sendMessage("");
+                    p.sendMessage(ChatColor.GREEN + "   ▸ Detalhes do Pagamento ◂   ");
+                    p.sendMessage("");
+                    p.sendMessage(ChatColor.GRAY   + "ID:      " + ChatColor.WHITE  + paid.getId());
+                    p.sendMessage(ChatColor.GRAY   + "Produto: " + ChatColor.WHITE  + paid.getItem());
+                    p.sendMessage(ChatColor.GRAY   + "Valor:   " + ChatColor.GREEN  + "R$ " + String.format("%.2f", paid.getAmount()));
+                    p.sendMessage(ChatColor.GRAY   + "Status:  " + (paid.getStatus().equalsIgnoreCase("paid")
                             ? ChatColor.GREEN + "Pago"
                             : ChatColor.RED   + "Pendente"));
-                    player.sendMessage(ChatColor.GRAY   + "Data:    " + ChatColor.WHITE  + sdf.format(new Date(paid.getCreatedAt())));
+                    p.sendMessage(ChatColor.GRAY   + "Data:    " + ChatColor.WHITE  + sdf.format(new Date(paid.getCreatedAt())));
 
                     return;
                 }
 
-                // 2) se não encontrou no DB (é pendente), chame a consulta na API
-                plugin.getPix().consultarStatusPagamento(paymentId, player, true);
+                plugin.getPix().consultarStatusPagamento(paymentId, p, true);
             }
         }
     }

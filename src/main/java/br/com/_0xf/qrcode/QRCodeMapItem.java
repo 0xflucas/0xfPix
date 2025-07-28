@@ -18,7 +18,7 @@ import java.util.List;
 
 public class QRCodeMapItem {
 
-    public static ItemStack createQRCodeMap(String base64QR, String price, String itemComprando, String tempoPagamento) {
+    public static ItemStack createQRCodeMap(String base64QR, String price, String itemComprando) {
         try {
             // Remove o prefixo base64 se existir
             String cleanBase64 = base64QR.replace("data:image/png;base64,", "");
@@ -30,7 +30,7 @@ public class QRCodeMapItem {
             BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
 
             // Redimensiona a imagem para 128x128 (resolução do mapa no MC 1.8)
-            BufferedImage resizedImage = resizeImage(originalImage, 128, 128);
+            BufferedImage resizedImage = resizeImage(originalImage, 128);
 
             // Cria o item mapa
             ItemStack mapItem = new ItemStack(Material.MAP);
@@ -88,9 +88,9 @@ public class QRCodeMapItem {
     }
 
     // Função para redimensionar BufferedImage para largura e altura definidas
-    private static BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
-        Image tmp = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    private static BufferedImage resizeImage(BufferedImage originalImage, int height) {
+        Image tmp = originalImage.getScaledInstance(128, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(128, height, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = resized.createGraphics();
         g2d.drawImage(tmp, 0, 0, null);

@@ -174,7 +174,4 @@ public class ShopGui {
         return result;
     }
 
-
-
-
 }

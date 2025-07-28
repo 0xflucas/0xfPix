@@ -31,16 +31,13 @@ public class PixManager {
     private final OkHttpClient httpClient = new OkHttpClient();
     private final String token;
 
-    // Caches em memória
-    public final Map<String, String> pagamentos = new ConcurrentHashMap<>();            // playerName → paymentId
-    public final Map<String, String> statusPagamentos = new ConcurrentHashMap<>();     // paymentId → status
-    public final Map<String, String> produtosPorPagamento = new ConcurrentHashMap<>();// paymentId → produto
-    public final Map<String, Double> valoresPorPagamento = new ConcurrentHashMap<>(); // paymentId → valor
-    private final Set<String> pagamentosProcessados = ConcurrentHashMap.newKeySet();// paymentId já concluído
-    private final Map<String, BukkitTask> tasksPorPagamento = new ConcurrentHashMap<>(); // paymentId → task
-    public final Map<String, Long> timestampsPorPagamento = new ConcurrentHashMap<>();
-
-
+    public final Map<String, String> payments = new ConcurrentHashMap<>();            // playerName → paymentId
+    public final Map<String, String> statusPayment = new ConcurrentHashMap<>();     // paymentId → status
+    public final Map<String, String> productByPayment = new ConcurrentHashMap<>();// paymentId → produto
+    public final Map<String, Double> priceByPayment = new ConcurrentHashMap<>(); // paymentId → valor
+    private final Set<String> processedPayment = ConcurrentHashMap.newKeySet();// paymentId já concluído
+    private final Map<String, BukkitTask> taskByPayment = new ConcurrentHashMap<>(); // paymentId → task
+    public final Map<String, Long> timestampByPayment = new ConcurrentHashMap<>();
     private final PaymentRepository paymentRepository;
 
     public PixManager(Main main, PaymentRepository paymentRepository) {
@@ -49,11 +46,11 @@ public class PixManager {
         this.token = main.getConfig().getString("mercado-pago.token");
     }
 
-    public void criarPagamentoPIX(Player player, String produto, double valor) {
-        String playerName = player.getName();
-        if (pagamentos.containsKey(playerName)) {
+    public void createPixPayment(Player p, String product, double price) {
+        String playerName = p.getName();
+        if (payments.containsKey(playerName)) {
             getScheduler().runTask(main, () ->
-                    player.sendMessage("§cVocê já tem um pagamento PIX pendente.")
+                    p.sendMessage("§cVocê já tem um pagamento PIX pendente.")
             );
             return;
         }
@@ -63,8 +60,8 @@ public class PixManager {
         payer.addProperty("email", playerName + "@mc-craft.com");
 
         JsonObject body = new JsonObject();
-        body.addProperty("transaction_amount", valor);
-        body.addProperty("description", "Compra de " + produto + " com PIX");
+        body.addProperty("transaction_amount", price);
+        body.addProperty("description", "Compra de " + product + " com PIX");
         body.add("payer", payer);
         body.addProperty("payment_method_id", "pix");
 
@@ -86,7 +83,7 @@ public class PixManager {
             public void onFailure(Call call, IOException e) {
                 main.getLogger().warning("Erro ao criar pagamento PIX: " + e.getMessage());
                 getScheduler().runTask(main, () ->
-                        player.sendMessage("§cErro ao criar pagamento PIX.")
+                        p.sendMessage("§cErro interno. Por favor, contate um administrador. #1")
                 );
             }
 
@@ -97,7 +94,7 @@ public class PixManager {
                         String erro = respBody != null ? respBody.string() : "desconhecido";
                         main.getLogger().warning("Erro ao criar PIX: " + erro);
                         getScheduler().runTask(main, () ->
-                                player.sendMessage("§cFalha: " + erro)
+                                p.sendMessage("§cErro interno. Por favor, contate um administrador. #2")
                         );
                         return;
                     }
@@ -105,7 +102,7 @@ public class PixManager {
                     if (respBody == null) {
                         main.getLogger().warning("Resposta vazia ao criar PIX.");
                         getScheduler().runTask(main, () ->
-                                player.sendMessage("§cErro interno.")
+                                p.sendMessage("§cErro interno. Por favor, contate um administrador. #3")
                         );
                         return;
                     }
@@ -118,51 +115,47 @@ public class PixManager {
                     String qrCode = tx.get("qr_code").getAsString();
                     String qrBase64 = tx.get("qr_code_base64").getAsString();
 
-                    // Armazena em memória
-                    pagamentos.put(playerName, paymentId);
-                    statusPagamentos.put(paymentId, status);
-                    produtosPorPagamento.put(paymentId, produto);
-                    valoresPorPagamento.put(paymentId, valor);
-                    timestampsPorPagamento.put(paymentId, System.currentTimeMillis());
-
-
                     // Envia QR ao jogador
                     getScheduler().runTask(main, () -> {
-                        player.sendMessage("§aPagamento PIX criado! ID: §e" + paymentId);
-                        player.sendMessage("§7QRCode:");
-                        player.sendMessage("§f" + qrCode);
-                        player.getInventory().addItem(
+                        p.sendMessage("§aPagamento PIX criado! ID: §e" + paymentId);
+                        p.sendMessage("§7QRCode:");
+                        p.sendMessage("§f" + qrCode);
+                        p.getInventory().addItem(
                                 QRCodeMapItem.createQRCodeMap(
                                         qrBase64,
-                                        "R$ " + String.format("%.2f", valor),
-                                        produto, "10 minutos"
-                                )
+                                        "R$ " + String.format("%.2f", price),
+                                        product)
                         );
 
-                        player.sendMessage("§aQRCode gerado com sucesso! Verifique seu inventário.");
-                        player.sendMessage("§aO pagamento será verificado automaticamente assim que for efetuado.");
-                        player.sendMessage("§aVocê tem até 10 minutos para concluir o pagamento antes que ele expire.");
+                        payments.put(playerName, paymentId);
+                        statusPayment.put(paymentId, status);
+                        productByPayment.put(paymentId, product);
+                        priceByPayment.put(paymentId, price);
+                        timestampByPayment.put(paymentId, System.currentTimeMillis());
+
+                        p.sendMessage("§aQRCode gerado com sucesso! Verifique seu inventário.");
+                        p.sendMessage("§aO pagamento será verificado automaticamente assim que for efetuado.");
+                        p.sendMessage("§aVocê tem até 10 minutos para concluir o pagamento antes que ele expire.");
 
                     });
 
-                    // Inicia monitoramento
-                    iniciarVerificacaoAutomatica(playerName, paymentId);
+                    startAutoCheck(playerName, paymentId);
                 }
             }
         });
     }
 
-    public void consultarStatusPagamento(String paymentId, Player player, boolean sendMessage) {
-        if (pagamentosProcessados.contains(paymentId)) {
+    public void consultarStatusPagamento(String paymentId, Player p, boolean sendMessage) {
+        if (processedPayment.contains(paymentId)) {
             getScheduler().runTask(main, () ->
-                    player.sendMessage("§aPagamento já foi processado.")
+                    p.sendMessage("§aPagamento já foi processado.")
             );
             return;
         }
 
-        String local = statusPagamentos.get(paymentId);
+        String local = statusPayment.get(paymentId);
         if ("approved".equals(local)) {
-            processarPagamento(paymentId, player);
+            processPayment(paymentId, p);
             return;
         }
 
@@ -176,7 +169,7 @@ public class PixManager {
             public void onFailure(Call call, IOException e) {
                 main.getLogger().warning("Erro ao consultar status: " + e.getMessage());
                 getScheduler().runTask(main, () ->
-                        player.sendMessage("§cErro ao consultar status.")
+                        p.sendMessage("§cErro ao consultar status.")
                 );
             }
 
@@ -185,7 +178,7 @@ public class PixManager {
                 try (ResponseBody rb = response.body()) {
                     if (response.code() == 404) {
                         getScheduler().runTask(main, () ->
-                                player.sendMessage("§cPagamento não encontrado.")
+                                p.sendMessage("§cPagamento não encontrado.")
                         );
                         return;
                     }
@@ -193,7 +186,7 @@ public class PixManager {
                         String msg = rb != null ? rb.string() : "desconhecido";
                         main.getLogger().warning("Consulta falhou: " + msg);
                         getScheduler().runTask(main, () ->
-                                player.sendMessage("§cFalha na consulta.")
+                                p.sendMessage("§cFalha na consulta.")
                         );
                         return;
                     }
@@ -201,7 +194,7 @@ public class PixManager {
                     if (rb == null) {
                         main.getLogger().warning("Resposta vazia ao consultar status.");
                         getScheduler().runTask(main, () ->
-                                player.sendMessage("§cErro interno.")
+                                p.sendMessage("§cErro interno.")
                         );
                         return;
                     }
@@ -209,52 +202,51 @@ public class PixManager {
                     String status = new JsonParser().parse(rb.string())
                             .getAsJsonObject()
                             .get("status").getAsString();
-                    statusPagamentos.put(paymentId, status);
+                    statusPayment.put(paymentId, status);
 
                     if ("approved".equals(status)) {
-                        processarPagamento(paymentId, player);
+                        processPayment(paymentId, p);
                     } else {
                         if (sendMessage) {
                             // Pegando dados do cache em memória
-                            String produto = produtosPorPagamento.get(paymentId);
-                            Double valor = valoresPorPagamento.get(paymentId);
-                            String statusAtual = statusPagamentos.get(paymentId);
-                            Long createdAtMillis = timestampsPorPagamento.get(paymentId);
+                            String product = productByPayment.get(paymentId);
+                            Double price = priceByPayment.get(paymentId);
+                            String currentStatus = statusPayment.get(paymentId);
+                            Long createdAtMillis = timestampByPayment.get(paymentId);
 
-                            // Formata a data, cuidado para ter o SimpleDateFormat definido
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy 'às' HH:mm");
 
-                            player.sendMessage("");
-                            player.sendMessage(ChatColor.GREEN + "   ▸ Detalhes do Pagamento ◂   ");
-                            player.sendMessage("");
-                            player.sendMessage(ChatColor.GRAY   + "ID:      " + ChatColor.WHITE  + paymentId);
-                            player.sendMessage(ChatColor.GRAY   + "Produto: " + ChatColor.WHITE  + (produto != null ? produto : "Desconhecido"));
-                            player.sendMessage(ChatColor.GRAY   + "Valor:   " + ChatColor.GREEN  + "R$ " + (valor != null ? String.format("%.2f", valor) : "0.00"));
+                            p.sendMessage("");
+                            p.sendMessage(ChatColor.GREEN + "   ▸ Detalhes do Pagamento ◂   ");
+                            p.sendMessage("");
+                            p.sendMessage(ChatColor.GRAY   + "ID:      " + ChatColor.WHITE  + paymentId);
+                            p.sendMessage(ChatColor.GRAY   + "Produto: " + ChatColor.WHITE  + (product != null ? product : "Desconhecido"));
+                            p.sendMessage(ChatColor.GRAY   + "Valor:   " + ChatColor.GREEN  + "R$ " + (price != null ? String.format("%.2f", price) : "0.00"));
 
-                            String statusTexto;
-                            ChatColor corStatus;
+                            String textStatus;
+                            ChatColor statusColor;
 
-                            if ("paid".equalsIgnoreCase(statusAtual) || "approved".equalsIgnoreCase(statusAtual)) {
-                                statusTexto = "Pago";
-                                corStatus = ChatColor.GREEN;
-                            } else if ("pending".equalsIgnoreCase(statusAtual)) {
-                                statusTexto = "Pendente";
-                                corStatus = ChatColor.RED;
+                            if ("paid".equalsIgnoreCase(currentStatus) || "approved".equalsIgnoreCase(currentStatus)) {
+                                textStatus = "Pago";
+                                statusColor = ChatColor.GREEN;
+                            } else if ("pending".equalsIgnoreCase(currentStatus)) {
+                                textStatus = "Pendente";
+                                statusColor = ChatColor.RED;
                             } else {
-                                statusTexto = statusAtual != null ? statusAtual.toUpperCase() : "Desconhecido";
-                                corStatus = ChatColor.RED;
+                                textStatus = currentStatus != null ? currentStatus.toUpperCase() : "Desconhecido";
+                                statusColor = ChatColor.RED;
                             }
 
-                            player.sendMessage(ChatColor.GRAY + "Status:  " + corStatus + statusTexto);
+                            p.sendMessage(ChatColor.GRAY + "Status:  " + statusColor + textStatus);
 
-                            String dataFormatada = createdAtMillis != null
+                            String formatedDate = createdAtMillis != null
                                     ? sdf.format(new Date(createdAtMillis))
                                     : "Desconhecida";
 
-                            player.sendMessage(ChatColor.GRAY   + "Data:    " + ChatColor.WHITE  + dataFormatada);
-                            player.sendMessage("");
+                            p.sendMessage(ChatColor.GRAY   + "Data:    " + ChatColor.WHITE  + formatedDate);
+                            p.sendMessage("");
 
-                            player.sendMessage("§c" + ("pending".equalsIgnoreCase(statusAtual)
+                            p.sendMessage("§c" + ("pending".equalsIgnoreCase(currentStatus)
                                     ? "Seu pagamento está pendente. Por favor, aguarde a confirmação."
                                     : "Pagamento aprovado!"));
                         }
@@ -264,20 +256,20 @@ public class PixManager {
         });
     }
 
-    private void processarPagamento(String paymentId, Player player) {
-        pagamentosProcessados.add(paymentId);
+    private void processPayment(String paymentId, Player p) {
+        processedPayment.add(paymentId);
 
         // Cancela a tarefa agendada
-        BukkitTask task = tasksPorPagamento.remove(paymentId);
+        BukkitTask task = taskByPayment.remove(paymentId);
         if (task != null) task.cancel();
 
         // Recupera dados
-        String produto = produtosPorPagamento.get(paymentId);
-        Double valor = valoresPorPagamento.get(paymentId);
-        if (produto == null || valor == null) {
+        String product = productByPayment.get(paymentId);
+        Double price = priceByPayment.get(paymentId);
+        if (product == null || price == null) {
             main.getLogger().warning("[PIX] Dados faltando p/ " + paymentId);
             getScheduler().runTask(main, () ->
-                    player.sendMessage("§cErro interno. Conta'te admin.")
+                    p.sendMessage("§cErro interno. Conta'te admin.")
             );
             return;
         }
@@ -285,9 +277,9 @@ public class PixManager {
         // Persiste no banco
         Payment pmt = new Payment(
                 paymentId,
-                player.getUniqueId(),
-                produto,
-                valor,
+                p.getUniqueId(),
+                product,
+                price,
                 "paid",
                 System.currentTimeMillis()
         );
@@ -295,18 +287,18 @@ public class PixManager {
 
         // Entrega e limpa memória
         getScheduler().runTask(main, () -> {
-            executarComandosConfigurados(player, produto);
-            produtosPorPagamento.remove(paymentId);
-            valoresPorPagamento.remove(paymentId);
-            statusPagamentos.remove(paymentId);
-            pagamentos.remove(player.getName());
-            timestampsPorPagamento.remove(paymentId);
-            removeQRCodeItem(player);
-            player.sendMessage("§aPagamento confirmado e entregue!");
+            runProductCommands(p, product);
+            productByPayment.remove(paymentId);
+            priceByPayment.remove(paymentId);
+            statusPayment.remove(paymentId);
+            payments.remove(p.getName());
+            timestampByPayment.remove(paymentId);
+            removeQRCodeItem(p);
+            p.sendMessage("§aPagamento confirmado e entregue!");
         });
     }
 
-    private void iniciarVerificacaoAutomatica(String playerName, String paymentId) {
+    private void startAutoCheck(String playerName, String paymentId) {
         final long interval = 20L * 10;
         final long timeout = 60_000L;
         final long start = System.currentTimeMillis();
@@ -320,17 +312,19 @@ public class PixManager {
                     );
                     removeQRCodeItem(p);
                 }
-                statusPagamentos.remove(paymentId);
-                pagamentos.remove(playerName);
-                tasksPorPagamento.remove(paymentId).cancel();
+
+
+                statusPayment.remove(paymentId);
+                payments.remove(playerName);
+                taskByPayment.remove(paymentId).cancel();
                 return;
             }
 
-            String status = statusPagamentos.getOrDefault(paymentId, "pending");
+            String status = statusPayment.getOrDefault(paymentId, "pending");
             Player p = Bukkit.getPlayerExact(playerName);
             if ("approved".equals(status)) {
                 if (p != null && p.isOnline()) {
-                    processarPagamento(paymentId, p);
+                    processPayment(paymentId, p);
                 }
             } else {
                 if (p != null && p.isOnline()) {
@@ -341,10 +335,10 @@ public class PixManager {
             }
         }, 250L, interval);
 
-        tasksPorPagamento.put(paymentId, task);
+        taskByPayment.put(paymentId, task);
     }
 
-    private void executarComandosConfigurados(Player player, String produto) {
+    private void runProductCommands(Player player, String produto) {
         for (String cat : main.getConfig().getConfigurationSection("categories").getKeys(false)) {
             String path = "categories." + cat + ".products." + produto + ".commands";
             for (String cmd : main.getConfig().getStringList(path)) {
@@ -370,6 +364,6 @@ public class PixManager {
     }
 
     public String getLastPayment(String playerName) {
-        return pagamentos.get(playerName);
+        return payments.get(playerName);
     }
 }
