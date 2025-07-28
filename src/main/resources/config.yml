@@ -8,6 +8,10 @@ mysql:
 mercado-pago:
   token: 'APP_USR-8675568385015371-072422-c44c05ecf5aa4d5c8217b6384c224a3b-822632870'
 
+pix:
+  expire_minutes: 3
+  warn_before_expire_minutes: 1
+
 categories:
   vips:
     slot: 10

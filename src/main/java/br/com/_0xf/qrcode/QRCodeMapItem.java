@@ -1,5 +1,6 @@
 package br.com._0xf.qrcode;
 
+import br.com._0xf.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -63,7 +64,7 @@ public class QRCodeMapItem {
                 lore.add("§7");
                 lore.add("§7Valor: §a" + price);
                 lore.add("§7Produto: §a" + itemComprando);
-                lore.add("§7Você tem até 10 minutos para realizar o pagamento");
+                lore.add("§7Você tem até §a" + Main.getInstance().getConfig().getInt("pix.expire_minutes") + " minutos §7para realizar o pagamento");
                 lore.add("§7Após o pagamento, aguarde a confirmação");
 
                 meta.setLore(lore);

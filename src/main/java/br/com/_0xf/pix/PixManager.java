@@ -36,6 +36,8 @@ public class PixManager {
     private final Map<String, BukkitTask> taskByPayment = new ConcurrentHashMap<>(); // paymentId → task
     public final Map<String, Long> timestampByPayment = new ConcurrentHashMap<>();
     private final PaymentRepository paymentRepository;
+    private final Set<String> wPayments = ConcurrentHashMap.newKeySet();
+
 
     public PixManager(Main main, PaymentRepository paymentRepository) {
         this.main = main;
@@ -132,7 +134,7 @@ public class PixManager {
 
                         p.sendMessage("§aQRCode gerado com sucesso! Verifique seu inventário.");
                         p.sendMessage("§aO pagamento será verificado automaticamente assim que for efetuado.");
-                        p.sendMessage("§aVocê tem até 10 minutos para concluir o pagamento antes que ele expire.");
+                        p.sendMessage("§7Você tem até §a" + main.getConfig().getInt("pix.expire_minutes", 10) + " minutos §7para concluir o pagamento antes que ele expire.");
 
                     });
 
@@ -297,14 +299,45 @@ public class PixManager {
     }
 
     private void startAutoCheck(String playerName, String paymentId) {
-        final long interval = 20L * 10;
-        final long timeout = 60_000L;
+        final long interval = 20L * 10; // 10 segundos em ticks
+
+        int expireMin = main.getConfig().getInt("pix.expire_minutes", 10);
+        int warnMin = main.getConfig().getInt("pix.warn_before_expire_minutes", 1);
+
+        final long timeout = expireMin * 60 * 1000L;
+        final long warningTime = timeout - (warnMin * 60 * 1000L);
         final long start = System.currentTimeMillis();
 
         BukkitTask task = getScheduler().runTaskTimerAsynchronously(main, () -> {
-            if (System.currentTimeMillis() - start >= timeout) {
-                Player p = Bukkit.getPlayerExact(playerName);
-                if (p != null && p.isOnline()) {
+            final long elapsed = System.currentTimeMillis() - start;
+            Player p = Bukkit.getPlayerExact(playerName);
+
+            if (p != null && p.isOnline()) {
+
+                // ⚠ AVISO CONFIGURÁVEL (só 1 vez)
+                if (elapsed >= warningTime && !wPayments.contains(paymentId)) {
+                    wPayments.add(paymentId);
+
+                    getScheduler().runTask(main, () -> {
+                        long remainingMillis = timeout - elapsed;
+                        long remainingMinutes = remainingMillis / 1000 / 60;
+                        long remainingSeconds = (remainingMillis / 1000) % 60;
+
+                        String timeMsg;
+                        if (remainingMinutes > 0) {
+                            timeMsg = remainingMinutes + " minuto" + (remainingMinutes > 1 ? "s" : "");
+                        } else {
+                            timeMsg = remainingSeconds + " segundo" + (remainingSeconds != 1 ? "s" : "");
+                        }
+
+                        p.sendMessage("");
+                        p.sendMessage("§cFaltam menos de " + timeMsg + " para o pagamento expirar!");
+                        p.sendMessage("§7Finalize o pagamento o quanto antes para receber o produto.");
+                    });
+                }
+
+                // ⏰ EXPIRAÇÃO
+                if (elapsed >= timeout) {
                     getScheduler().runTask(main, () -> {
                         p.sendMessage("");
                         p.sendMessage("§cTempo esgotado. Pagamento expirado!");
@@ -312,26 +345,21 @@ public class PixManager {
                         p.sendMessage("§7Você pode tentar novamente usando: §a/shop§7.");
                     });
                     removeQRCodeItem(p);
+
+                    statusPayment.remove(paymentId);
+                    payments.remove(playerName);
+                    wPayments.remove(paymentId);
+
+                    BukkitTask t = taskByPayment.remove(paymentId);
+                    if (t != null) t.cancel();
+                    return;
                 }
 
-                statusPayment.remove(paymentId);
-                payments.remove(playerName);
-
-                BukkitTask t = taskByPayment.remove(paymentId);
-                if (t != null) t.cancel();
-                return;
-            }
-
-            String status = statusPayment.getOrDefault(paymentId, "pending");
-            Player p = Bukkit.getPlayerExact(playerName);
-            if ("approved".equals(status)) {
-                if (p != null && p.isOnline()) {
+                // 🔁 VERIFICA STATUS
+                String status = statusPayment.getOrDefault(paymentId, "pending");
+                if ("approved".equals(status)) {
                     processPayment(paymentId, p);
-                }
-            } else {
-                if (p != null && p.isOnline()) {
-//                    Bukkit.getConsoleSender().sendMessage("§eVerificando PIX do player " + p.getName() + " Status: " + status.toUpperCase() + " - ID: " + paymentId);
-//                    p.sendMessage("§eVerificando PIX… Status: " + status.toUpperCase());
+                } else {
                     checkPaymentStatus(paymentId, p, false);
                 }
             }

@@ -118,7 +118,7 @@ public class Main extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("");
     }
 
-    public Main getInstance() {
+    public static Main getInstance() {
         return Main.getPlugin(Main.class);
     }
 
