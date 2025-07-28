@@ -17,10 +17,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.bukkit.Bukkit.getScheduler;
@@ -57,7 +54,7 @@ public class PixManager {
 
         // Monta body JSON
         JsonObject payer = new JsonObject();
-        payer.addProperty("email", playerName + "@mc-craft.com");
+        payer.addProperty("email", playerName.toLowerCase() + "@0xf.dev"); // damienvat@0xf.dev
 
         JsonObject body = new JsonObject();
         body.addProperty("transaction_amount", price);
@@ -66,7 +63,7 @@ public class PixManager {
         body.addProperty("payment_method_id", "pix");
 
         RequestBody requestBody = RequestBody.create(
-                MediaType.parse("application/json"),
+                Objects.requireNonNull(MediaType.parse("application/json")),
                 body.toString()
         );
 
@@ -145,7 +142,7 @@ public class PixManager {
         });
     }
 
-    public void consultarStatusPagamento(String paymentId, Player p, boolean sendMessage) {
+    public void checkPaymentStatus(String paymentId, Player p, boolean sendMessage) {
         if (processedPayment.contains(paymentId)) {
             getScheduler().runTask(main, () ->
                     p.sendMessage("§aPagamento já foi processado.")
@@ -269,7 +266,7 @@ public class PixManager {
         if (product == null || price == null) {
             main.getLogger().warning("[PIX] Dados faltando p/ " + paymentId);
             getScheduler().runTask(main, () ->
-                    p.sendMessage("§cErro interno. Conta'te admin.")
+                    p.sendMessage("§cErro interno. Por favor, contate um administrador. #4")
             );
             return;
         }
@@ -283,8 +280,8 @@ public class PixManager {
                 "paid",
                 System.currentTimeMillis()
         );
-        paymentRepository.save(pmt);
 
+        paymentRepository.save(pmt);
         // Entrega e limpa memória
         getScheduler().runTask(main, () -> {
             runProductCommands(p, product);
@@ -295,6 +292,7 @@ public class PixManager {
             timestampByPayment.remove(paymentId);
             removeQRCodeItem(p);
             p.sendMessage("§aPagamento confirmado e entregue!");
+
         });
     }
 
@@ -307,16 +305,20 @@ public class PixManager {
             if (System.currentTimeMillis() - start >= timeout) {
                 Player p = Bukkit.getPlayerExact(playerName);
                 if (p != null && p.isOnline()) {
-                    getScheduler().runTask(main, () ->
-                            p.sendMessage("§cTempo esgotado. Pagamento expirou.")
-                    );
+                    getScheduler().runTask(main, () -> {
+                        p.sendMessage("");
+                        p.sendMessage("§cTempo esgotado. Pagamento expirado!");
+                        p.sendMessage("§7O código PIX gerado não foi pago dentro do tempo limite.");
+                        p.sendMessage("§7Você pode tentar novamente usando: §a/shop§7.");
+                    });
                     removeQRCodeItem(p);
                 }
 
-
                 statusPayment.remove(paymentId);
                 payments.remove(playerName);
-                taskByPayment.remove(paymentId).cancel();
+
+                BukkitTask t = taskByPayment.remove(paymentId);
+                if (t != null) t.cancel();
                 return;
             }
 
@@ -330,7 +332,7 @@ public class PixManager {
                 if (p != null && p.isOnline()) {
 //                    Bukkit.getConsoleSender().sendMessage("§eVerificando PIX do player " + p.getName() + " Status: " + status.toUpperCase() + " - ID: " + paymentId);
 //                    p.sendMessage("§eVerificando PIX… Status: " + status.toUpperCase());
-                    consultarStatusPagamento(paymentId, p, false);
+                    checkPaymentStatus(paymentId, p, false);
                 }
             }
         }, 250L, interval);
@@ -345,6 +347,7 @@ public class PixManager {
                 Bukkit.dispatchCommand(
                         Bukkit.getConsoleSender(),
                         cmd.replace("{player}", player.getName())
+
                 );
             }
         }

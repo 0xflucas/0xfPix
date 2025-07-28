@@ -72,7 +72,6 @@ public class QRCodeMapItem {
 
             return mapItem;
         } catch (Exception e) {
-            // Retorna um item de erro (barreira)
             ItemStack errorItem = new ItemStack(Material.BARRIER);
             ItemMeta errorMeta = errorItem.getItemMeta();
 

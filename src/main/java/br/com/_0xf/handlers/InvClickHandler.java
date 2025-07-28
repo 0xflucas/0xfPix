@@ -117,7 +117,7 @@ public class InvClickHandler implements Listener {
                     return;
                 }
 
-                plugin.getPix().consultarStatusPagamento(paymentId, p, true);
+                plugin.getPix().checkPaymentStatus(paymentId, p, true);
             }
         }
     }

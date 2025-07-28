@@ -36,25 +36,43 @@ public class ShopCommand implements CommandExecutor {
         }
 
         Player p = (Player) sender;
+
+
         if (args.length == 0) {
+            if(!p.hasPermission("0xfpix.use")) {
+                p.sendMessage("§cVocê não tem permissão para usar este comando.");
+                return true;
+            }
+
             gui.openMainMenu(p);
             return true;
         }
 
+
         if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
+            if(!p.hasPermission("0xfpix.admin")) {
+                p.sendMessage("§cVocê não tem permissão para recarregar a configuração.");
+                return true;
+            }
+
             main.getInstance().reloadConfig();
             p.sendMessage("§aConfiguração recarregada com sucesso.");
             return true;
         }
 
         if(args[0].equals("status")) {
+            if(!p.hasPermission("0xfpix.use")) {
+                p.sendMessage("§cVocê não tem permissão para verificar o status do pagamento.");
+                return true;
+            }
+
             String paymentIdStatus = pixManager.getLastPayment(p.getName());
             if (paymentIdStatus == null) {
                 p.sendMessage("§cNenhum pagamento pendente encontrado.");
                 return true;
             }
 
-            pixManager.consultarStatusPagamento(paymentIdStatus, p, true);
+            pixManager.checkPaymentStatus(paymentIdStatus, p, true);
             return true;
         }
 

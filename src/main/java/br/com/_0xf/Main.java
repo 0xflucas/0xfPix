@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Main  extends JavaPlugin {
+public class Main extends JavaPlugin {
 
     public static final Map<String, Category> categories = new LinkedHashMap<>();
     private ConfirmationGui confirmationGui;
@@ -32,15 +32,14 @@ public class Main  extends JavaPlugin {
     public void onEnable() {
 
         setupConfig();
-        this.paymentDAO = new PaymentDAO(
-                this.getConfig().getString("mysql.host"),
-                this.getConfig().getInt("mysql.port"),
-                this.getConfig().getString("mysql.database"),
-                this.getConfig().getString("mysql.username"),
-                this.getConfig().getString("mysql.password"),
-
-                this
-        );
+            this.paymentDAO = new PaymentDAO(
+                    getConfig().getString("mysql.host"),
+                    getConfig().getInt("mysql.port"),
+                    getConfig().getString("mysql.database"),
+                    getConfig().getString("mysql.username"),
+                    getConfig().getString("mysql.password"),
+                    this
+            );
 
         try {
             this.paymentDAO.connect();
@@ -76,7 +75,7 @@ public class Main  extends JavaPlugin {
             pixManager.removeQRCodeItem(p);
         }
 
-         if (paymentDAO != null) {
+        if (paymentDAO != null) {
             paymentDAO.disconnect();
             Bukkit.getConsoleSender().sendMessage("§c[0xfPix] Banco de dados desconectado.");
         }
@@ -99,11 +98,11 @@ public class Main  extends JavaPlugin {
     }
 
     void setupProducts() {
-        ConfigurationSection catSec = getConfig().getConfigurationSection("categories");
-        if (catSec != null) {
-            for (String catId : catSec.getKeys(false)) {
-                Category category = new Category(catId, catSec.getConfigurationSection(catId));
-                categories.put(catId, category);
+        ConfigurationSection categoriesSection = getConfig().getConfigurationSection("categories");
+        if (categoriesSection != null) {
+            for (String categorieId : categoriesSection.getKeys(false)) {
+                Category category = new Category(categorieId, categoriesSection.getConfigurationSection(categorieId));
+                categories.put(categorieId, category);
             }
         }
 

@@ -18,7 +18,6 @@ repositories {
 
 dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.12'
-
     implementation 'com.google.zxing:core:3.5.3'
     compileOnly "com.hpfxd.pandaspigot:pandaspigot-api:1.8.8-R0.1-SNAPSHOT"
     compileOnly files('lib/PlotSquared-Bukkit-18.12.12-be48507-2053.jar')
