@@ -230,7 +230,7 @@ public class PixManager {
                                 statusColor = ChatColor.GREEN;
                             } else if ("pending".equalsIgnoreCase(currentStatus)) {
                                 textStatus = "Pendente";
-                                statusColor = ChatColor.RED;
+                                statusColor = ChatColor.YELLOW;
                             } else {
                                 textStatus = currentStatus != null ? currentStatus.toUpperCase() : "Desconhecido";
                                 statusColor = ChatColor.RED;
@@ -344,6 +344,21 @@ public class PixManager {
                         p.sendMessage("§7O código PIX gerado não foi pago dentro do tempo limite.");
                         p.sendMessage("§7Você pode tentar novamente usando: §a/shop§7.");
                     });
+
+
+                    Bukkit.getScheduler().runTaskAsynchronously(main, () -> {
+                        Payment expiredPayment = new Payment(
+                                paymentId,
+                                p.getUniqueId(),
+                                productByPayment.get(paymentId),     // produto
+                                priceByPayment.get(paymentId),       // valor
+                                "expired",                           // status
+                                System.currentTimeMillis()           // created_at
+                        );
+                        paymentRepository.save(expiredPayment); // Salva no banco
+                    });
+
+
                     removeQRCodeItem(p);
 
                     statusPayment.remove(paymentId);

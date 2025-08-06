@@ -31,6 +31,16 @@ public class PaymentRepository {
     }
     */
 
+    public List<Payment> getAllPaid(UUID uuid) {
+        List<Payment> payments = dbManager.getPaymentsByUUID(uuid);
+        if (payments == null) return Collections.emptyList();
+
+        return payments.stream()
+                .filter(p -> p != null && p.getStatus() != null && p.getStatus().equalsIgnoreCase("paid"))
+                .filter(p -> p.getStatus() != null)
+                .collect(Collectors.toList());
+    }
+
     public List<Payment> getAll(UUID uuid) {
         List<Payment> payments = dbManager.getPaymentsByUUID(uuid);
         if (payments == null) return Collections.emptyList();

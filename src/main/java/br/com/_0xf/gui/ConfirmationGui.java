@@ -65,7 +65,6 @@ public class ConfirmationGui {
                 }
 
                 data buy = pendents.get(p.getUniqueId());
-
                 if (buy != null) {
                     pixManager.createPixPayment(p, buy.product, buy.price);
                     p.closeInventory();

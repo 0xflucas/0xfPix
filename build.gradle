@@ -45,7 +45,7 @@ tasks.register('copyPlugin', Copy) {
     // from aceita Provider<File> diretamente
     from(tasks.named('shadowJar').flatMap { it.archiveFile })
 
-    into 'C:/Users/lucas/Desktop/0xfPix/plugins'
+    into 'C:/Users/lucas/Desktop/redevex.com.br/plugins'
     rename { "${project.name}-${project.version}.jar" }
     exclude '**/*.lck'
     doNotTrackState("Plugin folder may contain locked files (e.g., .lck from server)")

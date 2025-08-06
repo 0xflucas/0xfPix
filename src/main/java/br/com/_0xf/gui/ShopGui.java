@@ -112,6 +112,15 @@ public class ShopGui {
         }
 
         openedCategory.put(player.getUniqueId(), categoryKey);
+
+        ItemStack backButton = new ItemStack(Material.ARROW);
+        ItemMeta backMeta = backButton.getItemMeta();
+        if (backMeta != null) {
+            backMeta.setDisplayName(ChatColor.WHITE + "Voltar");
+            backButton.setItemMeta(backMeta);
+        }
+
+        inv.setItem(49, backButton);
         player.openInventory(inv);
     }
 

@@ -14,12 +14,10 @@ public class ShopCommand implements CommandExecutor {
 
     private final ShopGui gui;
     private final PixManager pixManager;
-    private final Main main;
 
-    public ShopCommand(ShopGui gui, Main main ) {
+    public ShopCommand(ShopGui gui, Main main) {
         this.gui = gui;
         this.pixManager = main.getPix();
-        this.main = main;
     }
 
     @Override
@@ -48,14 +46,13 @@ public class ShopCommand implements CommandExecutor {
             return true;
         }
 
-
         if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
             if(!p.hasPermission("0xfpix.admin")) {
                 p.sendMessage("§cVocê não tem permissão para recarregar a configuração.");
                 return true;
             }
 
-            main.getInstance().reloadConfig();
+            Main.getInstance().reloadConfig();
             p.sendMessage("§aConfiguração recarregada com sucesso.");
             return true;
         }

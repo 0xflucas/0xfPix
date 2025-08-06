@@ -81,6 +81,18 @@ public class InvClickHandler implements Listener {
         // 6) Handler do menu de produtos
         if (title.startsWith(productTitlePrefix)) {
             e.setCancelled(true);
+
+            ItemMeta meta = clicked.getItemMeta();
+            if (meta != null && meta.hasDisplayName()) {
+                String name = meta.getDisplayName();
+
+                if (name.equals(ChatColor.WHITE + "Voltar")) {
+                    // Volta para o menu principal
+                    shopGui.openMainMenu(p);
+                    return;
+                }
+            }
+
             shopGui.handleProductClick(p, clicked);
             return;
         }
@@ -93,12 +105,20 @@ public class InvClickHandler implements Listener {
             if (meta == null || !meta.hasDisplayName()) return;
 
             String name = meta.getDisplayName();
+
+
+            if (name.equals(ChatColor.WHITE + "Voltar")) {
+                // Volta para o menu principal
+                shopGui.openMainMenu(p);
+                return;
+            }
+
             if (name.startsWith(ChatColor.GRAY + "#")) {
                 String paymentId = name.replace(ChatColor.GRAY + "#", "");
 
                 // 1) tenta do cache/DB
-                Payment paid = plugin.getPaymentRepository().findById(paymentId);
-                if (paid != null) {
+                Payment payment = plugin.getPaymentRepository().findById(paymentId);
+                if (payment != null) {
                     // exibindo detalhes
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy 'às' HH:mm");
 
@@ -106,13 +126,13 @@ public class InvClickHandler implements Listener {
                     p.sendMessage("");
                     p.sendMessage(ChatColor.GREEN + "   ▸ Detalhes do Pagamento ◂   ");
                     p.sendMessage("");
-                    p.sendMessage(ChatColor.GRAY   + "ID:      " + ChatColor.WHITE  + paid.getId());
-                    p.sendMessage(ChatColor.GRAY   + "Produto: " + ChatColor.WHITE  + paid.getItem());
-                    p.sendMessage(ChatColor.GRAY   + "Valor:   " + ChatColor.GREEN  + "R$ " + String.format("%.2f", paid.getAmount()));
-                    p.sendMessage(ChatColor.GRAY   + "Status:  " + (paid.getStatus().equalsIgnoreCase("paid")
+                    p.sendMessage(ChatColor.GRAY   + "ID:      " + ChatColor.WHITE  + payment.getId());
+                    p.sendMessage(ChatColor.GRAY   + "Produto: " + ChatColor.WHITE  + payment.getItem());
+                    p.sendMessage(ChatColor.GRAY   + "Valor:   " + ChatColor.GREEN  + "R$ " + String.format("%.2f", payment.getAmount()));
+                    p.sendMessage(ChatColor.GRAY   + "Status:  " + (payment.getStatus().equalsIgnoreCase("paid")
                             ? ChatColor.GREEN + "Pago"
-                            : ChatColor.RED   + "Pendente"));
-                    p.sendMessage(ChatColor.GRAY   + "Data:    " + ChatColor.WHITE  + sdf.format(new Date(paid.getCreatedAt())));
+                            : ChatColor.RED   + "Expirado"));
+                    p.sendMessage(ChatColor.GRAY   + "Data:    " + ChatColor.WHITE  + sdf.format(new Date(payment.getCreatedAt())));
 
                     return;
                 }

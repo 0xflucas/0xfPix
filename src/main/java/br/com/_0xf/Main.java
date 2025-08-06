@@ -100,9 +100,9 @@ public class Main extends JavaPlugin {
     void setupProducts() {
         ConfigurationSection categoriesSection = getConfig().getConfigurationSection("categories");
         if (categoriesSection != null) {
-            for (String categorieId : categoriesSection.getKeys(false)) {
-                Category category = new Category(categorieId, categoriesSection.getConfigurationSection(categorieId));
-                categories.put(categorieId, category);
+            for (String categoryId : categoriesSection.getKeys(false)) {
+                Category category = new Category(categoryId, categoriesSection.getConfigurationSection(categoryId));
+                categories.put(categoryId, category);
             }
         }
 

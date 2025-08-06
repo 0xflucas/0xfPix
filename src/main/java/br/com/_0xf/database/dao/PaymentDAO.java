@@ -84,7 +84,7 @@ public class PaymentDAO {
     public List<Payment> getPaymentsByUUID(UUID uuid) {
         List<Payment> list = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM payments WHERE uuid = ? ORDER BY created_at DESC")) {
+                "SELECT * FROM payments WHERE uuid = ? ORDER BY created_at ASC")) {
             ps.setString(1, uuid.toString());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
