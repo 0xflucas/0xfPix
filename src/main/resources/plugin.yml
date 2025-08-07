@@ -7,10 +7,4 @@ commands:
   shop:
     description: Plugin para compras de item com Pix.
     usage: /shop <args>
-    aliases: [loja, pix]
-
-permissions:
-  0xfpix.use:
-    description: Permite usar o comando /shop && /shop status
-  0xfpix.admin:
-    description: Permite usar o comando /shop reload
+    aliases: [pix]

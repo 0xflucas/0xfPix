@@ -15,73 +15,223 @@ pix:
 categories:
   vips:
     slot: 10
-    id: 388 # emerald
+    id: 388
     data: 0
-    name: '&6Vips &7- acesso especial'
+    name: '&6Vips &7- Acesso Exclusivo'
     lore:
       - ''
-      - '&7Adquira vantagens exclusivas'
-      - '&7Como voar, cores e mais!'
+      - '&7Adquira vantagens poderosas:'
+      - '&7Voar, chat colorido, kits,'
+      - '&7efeitos e muito mais!'
       - ''
-      - '&eClique para abrir.'
+      - '&eClique para ver os niveis.'
     products:
-      vip-bronze:
+      titan_7d:
         slot: 20
-        id: 351
-        data: 10
-        name: '&6Vip &ebronze'
+        id: 264
+        data: 0
+        name: '&6Titan &8(7 dias)'
         lore:
-          - '&8Duração: &f30 dias'
+          - '&8Duracao: &f7 dias'
           - ''
-          - '&a✔ &7Voar no lobby'
-          - '&a✔ &7Prefixo personalizado'
+          - '&a+ &7Chat colorido'
+          - '&a+ &7Comando /fly'
+          - '&a+ &7Comando /hat'
+          - '&a+ &71x /tpahome por dia'
+          - '&a+ &7Acesso a loja VIP'
           - ''
-          - '&7Preço: &aR$ <value>'
+          - '&7Preco: &aR$ <value>'
           - ''
           - '&eClique para comprar.'
-        price: 0.01
+        price: 5.00
         commands:
-          - 'bc o {player} comprou o VIP Bronze!'
+          - 'cash remove {player} 50'
+          - 'lp user {player} parent addtemp titan 7d'
+          - 'kit titan'
+          - 'tell {player} &a+ VIP Titan ativado por 7 dias! Use /kit titan para seu kit!'
+          - 'bc &e★ {player} virou &6Titan &epor 7 dias!'
 
-      vip-prata:
+      titan_30d:
         slot: 21
-        id: 351
-        data: 8
-        name: '&7Vip &fPrata'
+        id: 264
+        data: 0
+        name: '&eTitan &a(30 dias)'
+        glow: true
         lore:
-          - '&8Duração: &f30 dias'
+          - '&8Duracao: &f30 dias'
           - ''
-          - '&a✔ &7Voar em todo servidor'
-          - '&a✔ &7Clans e eventos VIP'
+          - '&a+ &7Todos os beneficios do 7 dias'
+          - '&a+ &72x /tpahome por dia'
+          - '&a+ &7Kit semanal: 32 carvao + 8 diamantes'
+          - '&a+ &7Prioridade em eventos'
           - ''
-          - '&7Preço: &aR$ <value>'
+          - '&7Preco: &aR$ <value>'
           - ''
           - '&eClique para comprar.'
         price: 10.00
         commands:
-          - 'givevip prata {player}'
+          - 'cash remove {player} 100'
+          - 'lp user {player} parent addtemp titan 30d'
+          - 'kit titan'
+          - 'tell {player} &a+ VIP Titan ativado por 30 dias! Kit semanal ativado!'
+          - 'bc &e★ {player} virou &eTitan &apor 30 dias!'
 
-      vip-ouro:
+      mitico_7d:
         slot: 22
-        id: 266
+        id: 388
         data: 0
-        name: '&eVip &6Ouro'
+        name: '&bMítico &8(7 dias)'
         lore:
-          - '&8Duração: &f30 dias'
+          - '&8Duracao: &f7 dias'
           - ''
-          - '&a✔ &7Todos os comandos liberados'
-          - '&a✔ &7Tag exclusiva no chat'
+          - '&a+ &7Todos os do Titan'
+          - '&a+ &7/workbench e /enderchest'
+          - '&a+ &7Double Drops (2h/dia)'
+          - '&a+ &7Efeito leve ao andar'
           - ''
-          - '&7Preço: &aR$ <value>'
+          - '&7Preco: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 10.00
+        commands:
+          - 'cash remove {player} 100'
+          - 'lp user {player} parent addtemp mitico 7d'
+          - 'kit mitico'
+          - 'tell {player} &a+ VIP Mítico ativado por 7 dias! Use /kit mitico!'
+          - 'bc &9◆ {player} virou &bMítico &epor 7 dias!'
+
+      mitico_30d:
+        slot: 23
+        id: 388
+        data: 0
+        name: '&3Mítico &a(30 dias)'
+        glow: true
+        lore:
+          - '&8Duracao: &f30 dias'
+          - ''
+          - '&a+ &7Todos os beneficios do 7 dias'
+          - '&a+ &73x /tpahome por dia'
+          - '&a+ &7Double Drops (4h/dia)'
+          - '&a+ &7Kit semanal: 16 diamantes + pocoes'
+          - '&a+ &7Prioridade em eventos'
+          - ''
+          - '&7Preco: &aR$ <value>'
           - ''
           - '&eClique para comprar.'
         price: 20.00
         commands:
-          - 'givevip ouro {player}'
+          - 'cash remove {player} 200'
+          - 'lp user {player} parent addtemp mitico 30d'
+          - 'kit mitico'
+          - 'tell {player} &a+ VIP Mítico ativado por 30 dias! Kit ativado!'
+          - 'bc &9◆ {player} virou &3Mítico &apor 30 dias!'
+
+      lendario_7d:
+        slot: 24
+        id: 266
+        data: 0
+        name: '&6Lendário &8(7 dias)'
+        lore:
+          - '&8Duracao: &f7 dias'
+          - ''
+          - '&a+ &7Todos os do Mítico'
+          - '&a+ &7/heal e /feed'
+          - '&a+ &7Acesso a mundo exclusivo'
+          - '&a+ &7Título no chat: [Lendário]'
+          - '&a+ &74x /tpahome por dia'
+          - ''
+          - '&7Preco: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 15.00
+        commands:
+          - 'cash remove {player} 150'
+          - 'lp user {player} parent addtemp lendario 7d'
+          - 'kit lendario'
+          - 'tell {player} &a+ VIP Lendário ativado por 7 dias! Use /kit lendario!'
+          - 'bc &6● {player} virou &eLendário &epor 7 dias!'
+
+      lendario_30d:
+        slot: 25
+        id: 266
+        data: 0
+        name: '&6Lendário &a(30 dias)'
+        glow: true
+        lore:
+          - '&8Duracao: &f30 dias'
+          - ''
+          - '&a+ &7Double Drops (6h/dia)'
+          - '&a+ &7Kit semanal: 32 diamantes + flechas'
+          - '&a+ &7Efeito de partícula medio'
+          - '&a+ &7Sons ao entrar'
+          - '&a+ &7Prioridade total'
+          - ''
+          - '&7Preco: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 35.00
+        commands:
+          - 'cash remove {player} 350'
+          - 'lp user {player} parent addtemp lendario 30d'
+          - 'kit lendario'
+          - 'tell {player} &a+ VIP Lendário ativado por 30 dias! Poder maximo!'
+          - 'bc &6● {player} virou &6Lendário &apor 30 dias!'
+
+      ultimate_7d:
+        slot: 30
+        id: 421
+        data: 0
+        name: '&dUltimate &8(7 dias)'
+        lore:
+          - '&8Duracao: &f7 dias'
+          - ''
+          - '&a+ &7Todos os do Lendário'
+          - '&a+ &7/repair'
+          - '&a+ &7Double Drops ilimitado (6h)'
+          - '&a+ &7Efeito avancado'
+          - '&a+ &75x /tpahome por dia'
+          - ''
+          - '&7Preco: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 25.00
+        commands:
+          - 'cash remove {player} 250'
+          - 'lp user {player} parent addtemp ultimate 7d'
+          - 'kit ultimate'
+          - 'tell {player} &a+ VIP Ultimate ativado por 7 dias! O topo chegou!'
+          - 'bc &5★ {player} virou &dUltimate &epor 7 dias!'
+
+      ultimate_30d:
+        slot: 32
+        id: 421
+        data: 0
+        name: '&5Ultimate &a(30 dias)'
+        glow: true
+        lore:
+          - '&8Duracao: &f30 dias'
+          - ''
+          - '&a+ &7Kit semanal: 64 diamantes + caixa'
+          - '&a+ &7Título: &f[ULTIMATE] &a★'
+          - '&a+ &7Nome destacado no Tab'
+          - '&a+ &7Voto dobrado em eventos'
+          - '&a+ &7Mensagem ao entrar'
+          - '&a+ &7Efeito + som epico'
+          - ''
+          - '&7Preco: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 65.00
+        commands:
+          - 'cash remove {player} 650'
+          - 'lp user {player} parent addtemp ultimate 30d'
+          - 'kit ultimate'
+          - 'tell {player} &a+ VIP Ultimate ativado por 30 dias! Voce e o mais forte!'
+          - 'bc &5★ &l{player} virou &d&lULTIMATE &5&lpor 30 dias! O servidor treme!'
 
   spawners:
     slot: 12
-    id: 52 # spawn egg
+    id: 52
     data: 0
     name: '&dSpawners'
     lore:
@@ -99,15 +249,15 @@ categories:
         lore:
           - '&8Spawner que gera zumbis'
           - ''
-          - '&a✔ &7Otimo para farms'
-          - '&a✔ &7Defenda sua base'
+          - '&a+ &7Otimo para farms'
+          - '&a+ &7Defenda sua base'
           - ''
-          - '&7Preço: &aR$ <value>'
+          - '&7Preco: &aR$ <value>'
           - ''
           - '&eClique para comprar.'
         price: 15.00
         commands:
-          - 'give {player} spawn_egg 1 54'
+          - 'give {player} monster_egg 1 54'
 
       spawner-skeleton:
         slot: 24
@@ -117,15 +267,15 @@ categories:
         lore:
           - '&8Spawner que gera esqueletos'
           - ''
-          - '&a✔ &7Ideal para farmar flechas'
-          - '&a✔ &7Proteja sua fortaleza'
+          - '&a+ &7Ideal para farmar flechas'
+          - '&a+ &7Proteja sua fortaleza'
           - ''
-          - '&7Preço: &aR$ <value>'
+          - '&7Preco: &aR$ <value>'
           - ''
           - '&eClique para comprar.'
         price: 18.00
         commands:
-          - 'give {player} spawn_egg 1 51'
+          - 'give {player} monster_egg 1 51'
 
       spawner-creeper:
         slot: 25
@@ -135,19 +285,19 @@ categories:
         lore:
           - '&8Spawner que gera creepers'
           - ''
-          - '&a✔ &7Use com cuidado'
-          - '&a✔ &7Explosões garantidas'
+          - '&a+ &7Use com cuidado'
+          - '&a+ &7Explosoes garantidas'
           - ''
-          - '&7Preço: &aR$ <value>'
+          - '&7Preco: &aR$ <value>'
           - ''
           - '&eClique para comprar.'
         price: 20.00
         commands:
-          - 'give {player} spawn_egg 1 50'
+          - 'give {player} monster_egg 1 50'
 
   ferramentas:
     slot: 13
-    id: 290 # wooden shovel (sem dano de ataque)
+    id: 290
     data: 0
     name: '&3Ferramentas'
     lore:
@@ -163,12 +313,12 @@ categories:
         data: 0
         name: '&bPá de Madeira'
         lore:
-          - '&8Ferramenta leve e útil'
+          - '&8Ferramenta leve e util'
           - ''
-          - '&a✔ &7Escava mais rápido'
-          - '&a✔ &7Durabilidade razoável'
+          - '&a+ &7Escava mais rapido'
+          - '&a+ &7Durabilidade razoavel'
           - ''
-          - '&7Preço: &aR$ <value>'
+          - '&7Preco: &aR$ <value>'
           - ''
           - '&eClique para comprar.'
         price: 5.00
@@ -177,66 +327,92 @@ categories:
 
       tocha:
         slot: 26
-        id: 50 # torch
+        id: 50
         data: 0
         name: '&bTocha'
         lore:
           - '&8Ilumina seu caminho'
           - ''
-          - '&a✔ &7Fácil de usar'
-          - '&a✔ &7Perfeita para exploração'
+          - '&a+ &7Facil de usar'
+          - '&a+ &7Perfeita para exploracao'
           - ''
-          - '&7Preço: &aR$ <value>'
+          - '&7Preco: &aR$ <value>'
           - ''
           - '&eClique para comprar.'
         price: 1.00
         commands:
           - 'give {player} torch 16'
-
-  decoracoes:
-    slot: 14
-    id: 155 # quartz_block
+  cash:
+    slot: 11
+    id: 41
     data: 0
-    name: '&fDecorações'
+    name: '&aComprar Cash &f◆'
     lore:
       - ''
-      - '&7Blocos e itens para decorar'
-      - '&7suas construções e ambientes.'
+      - '&7Compre cash para usar'
+      - '&7em todas as lojas do servidor!'
+      - '&7VIPs, spawners, kits e mais.'
       - ''
-      - '&eClique para abrir.'
+      - '&eClique para ver os pacotes.'
     products:
-      vaso-flores:
-        slot: 27
-        id: 390
+      cash-100:
+        slot: 20
+        id: 41
         data: 0
-        name: '&fVaso de Flores'
+        name: '&fPacote &a100 Cash'
         lore:
-          - '&8Decore sua casa com estilo'
+          - '&8Receba: &f100 cash'
           - ''
-          - '&a✔ &7Colorido e vibrante'
-          - '&a✔ &7Perfeito para jardins'
+          - '&a+ &7Use em qualquer loja'
+          - '&a+ &7Ideal para começar'
           - ''
-          - '&7Preço: &aR$ <value>'
+          - '&7Preco: &aR$ <value>'
+          - '&8(10 centavos por cash)'
           - ''
           - '&eClique para comprar.'
-        price: 4.00
+        price: 10.00
         commands:
-          - 'give {player} flower_pot 1'
+          - 'cash add {player} 100'
+          - 'tell {player} &a+ Voce recebeu 100 cash! Use /loja para gastar.'
 
-      quadro-paisagem:
-        slot: 28
-        id: 321
+      cash-500:
+        slot: 22
+        id: 41
         data: 0
-        name: '&fQuadro Paisagem'
+        name: '&ePacote &6500 Cash'
         lore:
-          - '&8Decore paredes com arte'
+          - '&8Receba: &f500 cash'
           - ''
-          - '&a✔ &7Beleza e estilo'
-          - '&a✔ &7Valoriza sua casa'
+          - '&a+ &7Economize R$5,00'
+          - '&a+ &7Preco cheio: R$50,00'
+          - '&a+ &7Voce paga: R$45,00'
           - ''
-          - '&7Preço: &aR$ <value>'
+          - '&7Preco: &aR$ <value>'
           - ''
           - '&eClique para comprar.'
-        price: 5.50
+        price: 45.00
         commands:
-          - 'give {player} painting 1'
+          - 'cash add {player} 500'
+          - 'tell {player} &a+ Voce recebeu 500 cash! Economizou R$5,00!'
+
+      cash-1000:
+        slot: 24
+        id: 41
+        data: 0
+        name: '&cPacote &41000 Cash'
+        lore:
+          - '&8Receba: &f1000 cash'
+          - ''
+          - '&a+ &7Economize R$15,00'
+          - '&a+ &7Preco cheio: R$100,00'
+          - '&a+ &7Voce paga: R$85,00'
+          - '&a+ &7Ideal para VIP Ultimate'
+          - ''
+          - '&7Preco: &aR$ <value>'
+          - ''
+          - '&eClique para comprar.'
+        price: 85.00
+        commands:
+          - 'cash add {player} 1000'
+          - 'tell {player} &a+ Voce recebeu 1000 cash! Economizou R$15,00! Esta pronto para o topo!'
+          - 'bc &e★ {player} comprou o pacote &c1000 Cash &ee agora e um dos maiores do servidor!'

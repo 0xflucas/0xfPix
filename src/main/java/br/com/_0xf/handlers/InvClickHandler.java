@@ -122,13 +122,12 @@ public class InvClickHandler implements Listener {
                     // exibindo detalhes
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy 'às' HH:mm");
 
-
                     p.sendMessage("");
                     p.sendMessage(ChatColor.GREEN + "   ▸ Detalhes do Pagamento ◂   ");
                     p.sendMessage("");
                     p.sendMessage(ChatColor.GRAY   + "ID:      " + ChatColor.WHITE  + payment.getId());
                     p.sendMessage(ChatColor.GRAY   + "Produto: " + ChatColor.WHITE  + payment.getItem());
-                    p.sendMessage(ChatColor.GRAY   + "Valor:   " + ChatColor.GREEN  + "R$ " + String.format("%.2f", payment.getAmount()));
+                    p.sendMessage(ChatColor.GRAY   + "Valor:   " + ChatColor.WHITE  + "R$ " + String.format("%.2f", payment.getAmount()));
                     p.sendMessage(ChatColor.GRAY   + "Status:  " + (payment.getStatus().equalsIgnoreCase("paid")
                             ? ChatColor.GREEN + "Pago"
                             : ChatColor.RED   + "Expirado"));

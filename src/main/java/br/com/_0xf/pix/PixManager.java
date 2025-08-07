@@ -220,7 +220,7 @@ public class PixManager {
                             p.sendMessage("");
                             p.sendMessage(ChatColor.GRAY   + "ID:      " + ChatColor.WHITE  + paymentId);
                             p.sendMessage(ChatColor.GRAY   + "Produto: " + ChatColor.WHITE  + (product != null ? product : "Desconhecido"));
-                            p.sendMessage(ChatColor.GRAY   + "Valor:   " + ChatColor.GREEN  + "R$ " + (price != null ? String.format("%.2f", price) : "0.00"));
+                            p.sendMessage(ChatColor.GRAY   + "Valor:   " + ChatColor.WHITE  + "R$ " + (price != null ? String.format("%.2f", price) : "0.00"));
 
                             String textStatus;
                             ChatColor statusColor;
@@ -314,7 +314,6 @@ public class PixManager {
 
             if (p != null && p.isOnline()) {
 
-                // ⚠ AVISO CONFIGURÁVEL (só 1 vez)
                 if (elapsed >= warningTime && !wPayments.contains(paymentId)) {
                     wPayments.add(paymentId);
 

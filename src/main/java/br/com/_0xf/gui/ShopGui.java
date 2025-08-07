@@ -178,6 +178,7 @@ public class ShopGui {
             if (price >= 0) {
                 line = line.replace("<value>", String.format("%.2f", price));
             }
+
             result.add(line);
         }
         return result;

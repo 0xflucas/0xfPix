@@ -60,7 +60,7 @@ public class HistoryGui {
                     Arrays.asList(
                             "",
                             ChatColor.GRAY + "Produto: " + ChatColor.WHITE + product.getItem(),
-                            ChatColor.GRAY + "Valor: " + ChatColor.GREEN + "R$ " + String.format("%.2f", product.getAmount()),
+                            ChatColor.GRAY + "Valor: " + ChatColor.WHITE + "R$ " + String.format("%.2f", product.getAmount()),
                             ChatColor.GRAY + "Status: " +
                                     (product.getStatus().equalsIgnoreCase("paid")
                                             ? ChatColor.GREEN + "Pago"
@@ -88,7 +88,7 @@ public class HistoryGui {
                     Arrays.asList(
                             "",
                             ChatColor.GRAY + "Produto: " + ChatColor.WHITE + product,
-                            ChatColor.GRAY + "Valor: " + ChatColor.GREEN + "R$ " + String.format("%.2f", price),
+                            ChatColor.GRAY + "Valor: " + ChatColor.WHITE + "R$ " + String.format("%.2f", price),
                             ChatColor.GRAY + "Status: " + ChatColor.YELLOW + "Pendente",
                             ChatColor.GRAY + "Data: " + ChatColor.WHITE + sdf.format(new Date(createdAt)),
                             "",
