@@ -40,7 +40,7 @@ categories:
           - '&a+ &71x /tpahome por dia'
           - '&a+ &7Acesso a loja VIP'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 5.00
@@ -65,7 +65,7 @@ categories:
           - '&a+ &7Kit semanal: 32 carvao + 8 diamantes'
           - '&a+ &7Prioridade em eventos'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 10.00
@@ -89,7 +89,7 @@ categories:
           - '&a+ &7Double Drops (2h/dia)'
           - '&a+ &7Efeito leve ao andar'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 10.00
@@ -115,7 +115,7 @@ categories:
           - '&a+ &7Kit semanal: 16 diamantes + pocoes'
           - '&a+ &7Prioridade em eventos'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 20.00
@@ -140,7 +140,7 @@ categories:
           - '&a+ &7Título no chat: [Lendário]'
           - '&a+ &74x /tpahome por dia'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 15.00
@@ -166,7 +166,7 @@ categories:
           - '&a+ &7Sons ao entrar'
           - '&a+ &7Prioridade total'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 35.00
@@ -191,7 +191,7 @@ categories:
           - '&a+ &7Efeito avancado'
           - '&a+ &75x /tpahome por dia'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 25.00
@@ -218,7 +218,7 @@ categories:
           - '&a+ &7Mensagem ao entrar'
           - '&a+ &7Efeito + som epico'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 65.00
@@ -252,7 +252,7 @@ categories:
           - '&a+ &7Otimo para farms'
           - '&a+ &7Defenda sua base'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 15.00
@@ -270,7 +270,7 @@ categories:
           - '&a+ &7Ideal para farmar flechas'
           - '&a+ &7Proteja sua fortaleza'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 18.00
@@ -288,7 +288,7 @@ categories:
           - '&a+ &7Use com cuidado'
           - '&a+ &7Explosoes garantidas'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 20.00
@@ -318,7 +318,7 @@ categories:
           - '&a+ &7Escava mais rapido'
           - '&a+ &7Durabilidade razoavel'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 5.00
@@ -336,7 +336,7 @@ categories:
           - '&a+ &7Facil de usar'
           - '&a+ &7Perfeita para exploracao'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 1.00
@@ -366,7 +366,7 @@ categories:
           - '&a+ &7Use em qualquer loja'
           - '&a+ &7Ideal para começar'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - '&8(10 centavos por cash)'
           - ''
           - '&eClique para comprar.'
@@ -387,7 +387,7 @@ categories:
           - '&a+ &7Preco cheio: R$50,00'
           - '&a+ &7Voce paga: R$45,00'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 45.00
@@ -408,7 +408,7 @@ categories:
           - '&a+ &7Voce paga: R$85,00'
           - '&a+ &7Ideal para VIP Ultimate'
           - ''
-          - '&7Preco: &aR$ <value>'
+          - '&7Preco: &aR$<value>'
           - ''
           - '&eClique para comprar.'
         price: 85.00

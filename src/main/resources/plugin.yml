@@ -1,7 +1,7 @@
 name: 0xfPix
-main: br.com._0xf.Main
-version: 1.0-SNAPSHOT
-soft-depend: []
+main: io.qzz._0xflucas.PixPlugin
+version: 1.1
+depend: []
 author: 0xflucas
 commands:
   shop:

@@ -1,8 +1,8 @@
-package br.com._0xf.commands;
+package io.qzz._0xflucas.commands;
 
-import br.com._0xf.Main;
-import br.com._0xf.gui.ShopGui;
-import br.com._0xf.pix.PixManager;
+import io.qzz._0xflucas.PixPlugin;
+import io.qzz._0xflucas.gui.ShopGui;
+import io.qzz._0xflucas.pix.PixManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,21 +12,22 @@ import org.bukkit.entity.Player;
 
 public class ShopCommand implements CommandExecutor {
 
+    private final PixPlugin main;
     private final ShopGui gui;
     private final PixManager pixManager;
 
-    public ShopCommand(ShopGui gui, Main main) {
+    public ShopCommand(ShopGui gui, PixPlugin main) {
+        this.main = main;
         this.gui = gui;
         this.pixManager = main.getPix();
     }
 
     @Override
     public boolean onCommand(
-        CommandSender sender,
-        Command command,
-        String label,
-        String[] args
-    ) {
+            CommandSender sender,
+            Command command,
+            String label,
+            String[] args) {
 
         if (!(sender instanceof Player)) {
             sender.sendMessage("Comando apenas para jogadores.");
@@ -35,9 +36,8 @@ public class ShopCommand implements CommandExecutor {
 
         Player p = (Player) sender;
 
-
         if (args.length == 0) {
-            if(!p.hasPermission("0xfpix.use")) {
+            if (!p.hasPermission("0xfpix.use")) {
                 p.sendMessage("§cVocê não tem permissão para usar este comando.");
                 return true;
             }
@@ -46,19 +46,19 @@ public class ShopCommand implements CommandExecutor {
             return true;
         }
 
-        if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
-            if(!p.hasPermission("0xfpix.admin")) {
+        if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
+            if (!p.hasPermission("0xfpix.admin")) {
                 p.sendMessage("§cVocê não tem permissão para recarregar a configuração.");
                 return true;
             }
 
-            Main.getInstance().reloadConfig();
+            this.main.reloadConfig();
             p.sendMessage("§aConfiguração recarregada com sucesso.");
             return true;
         }
 
-        if(args[0].equals("status")) {
-            if(!p.hasPermission("0xfpix.use")) {
+        if (args[0].equals("status")) {
+            if (!p.hasPermission("0xfpix.use")) {
                 p.sendMessage("§cVocê não tem permissão para verificar o status do pagamento.");
                 return true;
             }

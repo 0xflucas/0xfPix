@@ -3,11 +3,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-group = 'br.com._0xf'
 version = '1.0-SNAPSHOT'
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
 
 repositories {
     mavenCentral()
@@ -20,7 +16,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.12'
     implementation 'com.google.zxing:core:3.5.3'
     compileOnly "com.hpfxd.pandaspigot:pandaspigot-api:1.8.8-R0.1-SNAPSHOT"
-    compileOnly files('lib/PlotSquared-Bukkit-18.12.12-be48507-2053.jar')
+    implementation("com.github.cryptomorin:XSeries:13.3.3")
+
 }
 
 // Desabilita o jar padrão, vamos usar só o shadowJar
@@ -45,7 +42,7 @@ tasks.register('copyPlugin', Copy) {
     // from aceita Provider<File> diretamente
     from(tasks.named('shadowJar').flatMap { it.archiveFile })
 
-    into 'C:/Users/lucas/Desktop/redevex.com.br/plugins'
+    into 'C:/Users/lucas/Desktop/server/plugins'
     rename { "${project.name}-${project.version}.jar" }
     exclude '**/*.lck'
     doNotTrackState("Plugin folder may contain locked files (e.g., .lck from server)")
@@ -56,5 +53,3 @@ tasks.build {
     dependsOn(tasks.named('shadowJar'))
     dependsOn(tasks.named('copyPlugin'))
 }
-
-

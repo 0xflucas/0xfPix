@@ -1,15 +1,15 @@
-package br.com._0xf;
+package io.qzz._0xflucas;
 
-import br.com._0xf.commands.ShopCommand;
-import br.com._0xf.database.dao.PaymentDAO;
-import br.com._0xf.database.repository.PaymentRepository;
-import br.com._0xf.gui.ConfirmationGui;
-import br.com._0xf.gui.HistoryGui;
-import br.com._0xf.gui.ShopGui;
-import br.com._0xf.handlers.InvClickHandler;
-import br.com._0xf.handlers.RightClickMapHandler;
-import br.com._0xf.models.Category;
-import br.com._0xf.pix.PixManager;
+import io.qzz._0xflucas.commands.ShopCommand;
+import io.qzz._0xflucas.database.dao.PaymentDAO;
+import io.qzz._0xflucas.database.repository.PaymentRepository;
+import io.qzz._0xflucas.gui.ConfirmationGui;
+import io.qzz._0xflucas.gui.HistoryGui;
+import io.qzz._0xflucas.gui.ShopGui;
+import io.qzz._0xflucas.handlers.InvClickHandler;
+import io.qzz._0xflucas.handlers.RightClickMapHandler;
+import io.qzz._0xflucas.models.Category;
+import io.qzz._0xflucas.pix.PixManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Main extends JavaPlugin {
+public class PixPlugin extends JavaPlugin {
 
     public static final Map<String, Category> categories = new LinkedHashMap<>();
     private ConfirmationGui confirmationGui;
@@ -32,23 +32,24 @@ public class Main extends JavaPlugin {
     public void onEnable() {
 
         setupConfig();
-            this.paymentDAO = new PaymentDAO(
-                    getConfig().getString("mysql.host"),
-                    getConfig().getInt("mysql.port"),
-                    getConfig().getString("mysql.database"),
-                    getConfig().getString("mysql.username"),
-                    getConfig().getString("mysql.password"),
-                    this
-            );
+        this.paymentDAO = new PaymentDAO(
+                getConfig().getString("mysql.host"),
+                getConfig().getInt("mysql.port"),
+                getConfig().getString("mysql.database"),
+                getConfig().getString("mysql.username"),
+                getConfig().getString("mysql.password"),
+                this);
 
         try {
             this.paymentDAO.connect();
             Bukkit.getConsoleSender().sendMessage("");
-            Bukkit.getConsoleSender().sendMessage("§b[0xfPix] Banco de dados §f'" + this.getConfig().getString("mysql.database") + "' §bconectado com sucesso.");
+            Bukkit.getConsoleSender().sendMessage("§b[0xfPix] Banco de dados §f'"
+                    + this.getConfig().getString("mysql.database") + "' §bconectado com sucesso.");
         } catch (Exception e) {
-//            e.printStackTrace();
+            // e.printStackTrace();
             Bukkit.getConsoleSender().sendMessage("§4§lErro ao conectar ao banco de dados: " + e.getMessage());
-            Bukkit.getConsoleSender().sendMessage("§c[0xfPix] Erro ao conectar ao banco de dados. Verifique as configurações.");
+            Bukkit.getConsoleSender()
+                    .sendMessage("§c[0xfPix] Erro ao conectar ao banco de dados. Verifique as configurações.");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -82,10 +83,13 @@ public class Main extends JavaPlugin {
     }
 
     void setupEvents() {
-        this.getServer().getPluginManager().registerEvents(new InvClickHandler(this, shopGui, confirmationGui, historyGui), this);
+        this.getServer().getPluginManager()
+                .registerEvents(new InvClickHandler(this, shopGui, confirmationGui, historyGui), this);
         this.getServer().getPluginManager().registerEvents(new RightClickMapHandler(), this);
-//        this.getServer().getPluginManager().registerEvents(new DropQRCodeHandler(), this);
-//        this.getServer().getPluginManager().registerEvents(new QRCodeMoveHandler(), this);
+        // this.getServer().getPluginManager().registerEvents(new DropQRCodeHandler(),
+        // this);
+        // this.getServer().getPluginManager().registerEvents(new QRCodeMoveHandler(),
+        // this);
     }
 
     void setupCommands() {
@@ -106,20 +110,21 @@ public class Main extends JavaPlugin {
             }
         }
 
-        Bukkit.getConsoleSender().sendMessage("§aCategorias e produtos carregados: §7" + categories.size());
+        Bukkit.getConsoleSender().sendMessage("§bCategorias carregadas: §f" + categories.size());
     }
 
     void setupMessages() {
         Bukkit.getConsoleSender().sendMessage("");
         Bukkit.getConsoleSender().sendMessage("");
         Bukkit.getConsoleSender().sendMessage("§7==============================================================");
-        Bukkit.getConsoleSender().sendMessage("§b=>[0xfPix] §f" + this.getDescription().getName() + " " + this.getDescription().getVersion() + " plugin habilitado com sucesso!!!");
+        Bukkit.getConsoleSender().sendMessage("§b=>[0xfPix] §f" + this.getDescription().getName() + " "
+                + this.getDescription().getVersion() + " plugin habilitado com sucesso!!!");
         Bukkit.getConsoleSender().sendMessage("§7==============================================================");
         Bukkit.getConsoleSender().sendMessage("");
     }
 
-    public static Main getInstance() {
-        return Main.getPlugin(Main.class);
+    public static PixPlugin getInstance() {
+        return PixPlugin.getPlugin(PixPlugin.class);
     }
 
     public PixManager getPix() {
